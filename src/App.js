@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 
 import Rule from './Rule';
+import Condition from './Condition';
 
 class App extends Component {
  /* constructor(props) {
@@ -24,9 +25,10 @@ class App extends Component {
         </div>
         <p className="App-intro">
           rule engine documentation for {this.state.name}          
-        </p>        
+        </p>   
 
         <Rule />
+        <Condition />
       </div>
     );
   }
