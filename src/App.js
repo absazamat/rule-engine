@@ -2,7 +2,19 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+import Rule from './Rule';
+
 class App extends Component {
+ /* constructor(props) {
+    super(props);
+    // Operations usually carried out in componentWillMount go here
+  }*/
+
+  state = {
+    name: 'QuoteFilter',
+    rules: []
+  }
+
   render() {
     return (
       <div className="App">
@@ -11,8 +23,10 @@ class App extends Component {
           <h2>Welcome to Rule Engine!</h2>
         </div>
         <p className="App-intro">
-          rule engine documentation
-        </p>
+          rule engine documentation for {this.state.name}          
+        </p>        
+
+        <Rule />
       </div>
     );
   }
