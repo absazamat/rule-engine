@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 
-class Condition extends Component {  
+class Rule extends Component {
   /*constructor(props) {
     super(props);
     // Operations usually carried out in componentWillMount go here
   }*/
   state = {
-    name: 'condition name'
+      name: 'Rule',
+      conditions: [],
+      actions: []
   }
 
   render() {
@@ -14,6 +16,7 @@ class Condition extends Component {
       <div>{this.state.name}</div>
     );
   }
+
 }
 
-export default Condition;
+export default Rule;

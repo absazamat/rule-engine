@@ -12,7 +12,7 @@ class App extends Component {
   }*/
 
   state = {
-    name: 'QuoteFilter',
+    name: 'Quote Filter',
     rules: []
   }
 

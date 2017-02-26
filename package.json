@@ -13,6 +13,12 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "git:push": "git push --all --repo=https://github.com/absazamat/rule-engine",
+    "git:pull": "git pull origin",
+    "git:commit": "git commit --all -m",
+    "git:commit:comment": "npm run git:commit -- 'comment'",
+    "git:add": "git add --all",
+    "git:clone": "git clone https://github.com/absazamat/rule-engine"
   }
 }
