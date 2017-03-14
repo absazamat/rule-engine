@@ -1,91 +1,82 @@
 import React, { Component } from 'react';
 
-class Rule {
-    constructor(name) {
-        this.name = name;
-        this.conditions = [];
-        this.actions = [];
+import RuleViewForm from './RuleViewForm';
+import ConditionAddForm from './ConditionAddForm';
+import ActionAddForm from './ActionAddForm';
+
+class RuleAddForm extends Component {
+    constructor(props) {
+      super(props);
+
+      this.addCondition = this.addCondition.bind(this);     
+      this.addAction = this.addAction.bind(this);
+     this.handleChange = this.handleChange.bind(this);
+      this.handleSubmit = this.handleSubmit.bind(this);  
     }
 
-    addAction(action) {
-        if (action) {
-            this.actions.push(action);
-        }
+    state = {
+        name: null,
+        conditions: [],
+        actions: [],
+        isAdded: false      
     }
 
     addCondition(condition) {
-        if (condition) {
-            this.conditions.push(condition);
-        }
+        if (!condition || !condition.id) return;
+
+        this.state.conditions.push(condition);
+        this.setState({ conditions: this.state.conditions});
     }
 
-}
+    addAction(action) {
+        if (!action || !action.id) return;
 
-class Condition {
-    constructor(id, name) {
-        this.id = id;
-        this.name = name;
-    }
-}
-
-class Action {
-    constructor(id, name) {
-        this.id = id;
-        this.name = name;
-    }
-}
-
-class RuleListForm extends Component {
-    state = {
-
-    }    
-}
-
-class RuleAddForm extends Component {
-    /*constructor(props) {
-      super(props);
-      // Operations usually carried out in componentWillMount go here
-    }*/
-
-    state = {
-        name: 'Rule',
-        conditions: [ 
-                new Condition(1, 'A == B'),
-                new Condition(2, 'A > B'),
-                new Condition(3, 'A < B')
-            ],
-        actions: [ 
-                new Action(1, 'Show'),
-                new Action(2, 'Hide')
-            ]
-    }
-    
-    conditionList() {
-        return this.state.conditions.map(
-            c => <option value={c.id}>{c.name}</option>
-        );
+        this.state.actions.push(action);
+        this.setState({ actions: this.state.actions });
     }
 
-    actionList() {
-        return this.state.actions.map(
-            a => <option value={a.id}>{a.name}</option>
-        );
+    handleChange(event) {
+      const target = event.target;
+      const value = target.type === 'checkbox' ? target.checked : target.value;
+      const name = target.name;
+
+      this.setState({ [name]: value });
+    }
+
+    handleSubmit(event) {
+      event.preventDefault();
+
+      if (this.state.name) {
+        this.props.addRule(this.state);    
+        //this.ruleForm.reset();
+
+        this.setState({
+            name: null,
+            conditions: [],
+            actions: []    
+        });
+      }
     }
 
     render() {
         return (
-            <div>
-                <select name="conditions">
-                    { this.conditionList() }
-                </select>
+            <div>       
+                <div><b>Add rule</b></div>
+                <form onSubmit={this.handleSubmit} name="ruleForm">
+                    <label>
+                        Name: <input name="name" type="text" value={this.state.name} onChange={this.handleChange} />
+                    </label>              
+                    <input type="submit" value="Add rule" />
+                </form>
+                <ConditionAddForm addCondition={this.addCondition} />
+                <ActionAddForm addAction={this.addAction} />
 
-                <select name="actions">
-                    { this.actionList() }
-                </select>
+                <hr/>    
+                <b>New rule</b>
+                <RuleViewForm rule={this.state} />                
             </div>
         );
     }
-
 }
 
 export default RuleAddForm;
