@@ -8,9 +8,7 @@ class RuleAddForm extends Component {
     constructor(props) {
       super(props);
 
-      this.addCondition = this.addCondition.bind(this);     
-      this.addAction = this.addAction.bind(this);
-     this.handleChange = this.handleChange.bind(this);
+      this.handleChange = this.handleChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);  
     }
 
@@ -48,8 +46,6 @@ class RuleAddForm extends Component {
 
       if (this.state.name) {
         this.props.addRule(this.state);    
-        //this.ruleForm.reset();
-
         this.setState({
             name: null,
             conditions: [],
