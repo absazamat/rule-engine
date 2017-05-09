@@ -23,15 +23,18 @@ class RuleForm extends Component {
       this.setState({
           ruleName: event.target.value
       });       
-    }
+    } 
 
     handleSubmit(event) {
         event.preventDefault();
 
-        this.props.onSubmit({
-            name: this.state.ruleName
-        });
-        this.setState({ ruleName: '' });
+        if (this.state.ruleName) {            
+            this.props.onSubmit({
+                id: 0,
+                name: this.state.ruleName
+            });
+            this.setState({ ruleName: '' });
+        }
     }
 
     render() {
@@ -47,10 +50,17 @@ class RuleForm extends Component {
                          placeholder="rule name..." />
                   <br />
 
-                  <label htmlFor="conditions">Conditions:</label>                  
+                  <label htmlFor="conditions">Conditions:</label>
+                  <div id="conditions">
+                      
+                  </div>
                   <br/>
 
-                  <input type="submit" value="Add rule" />                   
+                  <label htmlFor="actions">Actions:</label>
+
+                  <br/>
+
+                  <input type="submit" value="Save" />                   
               </form>
           </div>                    
       );

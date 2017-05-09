@@ -9,20 +9,20 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.addNewRule = this.addNewRule.bind(this);
+    this.saveRule = this.saveRule.bind(this);
   }
   
   state = {
     engineName: 'Quote Filter',
 
-    rules: [
-        { 
+    rules: {
+        retailTable: {
           id: 1, 
-          name: 'Retail_Table',
+          name: 'retailTable',
           conditions: [ { id: 1, name: 'A == B' } ],
           actions: [ { id: 1, name: 'Show' } ],
         }
-    ],
+    },
      
     availableActions: [
         { id: 1, name: 'Show' },
@@ -33,18 +33,32 @@ class App extends Component {
         { id: 2, name: 'A > B' },
         { id: 3, name: 'A < B' }
     ],
+    
+    ruleToSave: {
+        id: 0,
+        name: '',
+        conditions: [ { id: 1, name: 'A == B' } ],
+        actions: [ { id: 1, name: 'Show' } ],
+    },
 
-    selectedActions: [],
+    selectedActions: [1, 2],
     selectedConditions: []
   }
 
-  addNewRule(rule) {
+  saveRule(rule) {
       if (!rule) return;
 
-      this.setState(prevState => ({
-        rules: prevState.rules.concat(rule) // prevState is needed for avoiding race conditions
-      }));
-  }
+      if (rule.id === 0) {
+        // сreate rule
+        rule.id = Object.keys(this.state.rules).length + 1; // call backend api: save to db
+      }
+
+      // prevState is needed for avoiding race conditions
+      this.setState(prevState => {        
+        prevState.rules[rule.name] = rule;
+        return prevState;
+      });      
+  } 
 
 
 /*
@@ -76,14 +90,16 @@ class App extends Component {
         </p>
         <hr/>      
 
-        <RuleForm rule={this.state.rules[0]} onSubmit={this.addNewRule} />
-        <br/><br/>
+        <RuleForm rule={this.state.ruleToSave} 
+                  availableActions={this.state.availableActions}
+                  availableConditions={this.state.availableConditions}
+                  onSubmit={this.saveRule} />
+        <br/>
 
         <hr/>
         <b>.: Rules :.</b>
         <hr/>
-        {this.state.rules.map(r => <RuleViewForm key={r.id} rule={r}/>)}
-
+        { Object.keys(this.state.rules).map(key => <RuleViewForm key={key} rule={this.state.rules[key]} />) }
       </div>
     );
   }

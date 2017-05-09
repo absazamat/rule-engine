@@ -15,11 +15,11 @@ class RuleViewForm extends Component {
 
     render() {
       return (
-          <div key={this.props.rule.id}>
-              <div>name: {this.props.rule.name}</div>
-              <div>conditions: {(this.props.rule.conditions || []).map(c => this.conditionView(c))}</div>
-              <div>actions: {(this.props.rule.actions || []).map(a => this.actionView(a))}</div>
-              <hr/>
+          <div>
+            <div>name: {this.props.rule.name}</div>
+            <div>conditions: {(this.props.rule.conditions || []).map(c => this.conditionView(c))}</div>
+            <div>actions: {(this.props.rule.actions || []).map(a => this.actionView(a))}</div>
+            <hr/>
           </div>                    
       );
     }
