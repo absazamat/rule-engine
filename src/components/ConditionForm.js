@@ -1,21 +1,18 @@
 import React, { Component } from 'react';
 
 class ConditionForm extends Component {
-    state = {
-    }
-
     conditionView(condition) {        
         return (
             <div key={condition.id} 
                  className={this.conditionClassName(condition)}
-                 onClick={() => this.props.addCondition(condition)}>
+                 onClick={() => this.props.toggleCondition(condition)}>
                     {condition.name}
             </div>
         );
     }
 
     conditionClassName(condition) {
-        if (this.props.selectedConditions.map(c => c.id).indexOf(condition.id) >= 0) {
+        if ((this.props.selectedConditions || []).map(c => c.id).indexOf(condition.id) >= 0) {
             return 'selected';
         }
     }

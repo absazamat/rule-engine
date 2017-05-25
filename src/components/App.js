@@ -18,11 +18,18 @@ class App extends Component {
         rules: {
             retailTable: {
                 id: 1, 
-                name: 'retailTable',
+                name: 'retailTable',                
                 conditions: [ { id: 1, name: 'A == B' } ],
-                actions: [ { id: 1, name: 'Show' } ],
+                actions: [ { id: 1, name: 'Show' } ]
             }
-        }     
+        },
+
+        ruleToSave: { 
+            id: 1,
+            name: 'retailTable',
+            conditions: [ { id: 1, name: 'A == B' } ],
+            actions: [ { id: 1, name: 'Show' } ]                        
+        }
     }
 
     saveRule(rule) {
@@ -34,8 +41,10 @@ class App extends Component {
         }
 
         // prevState is needed for avoiding race conditions
-        this.setState(prevState => {        
+        this.setState(prevState => {   
             prevState.rules[rule.name] = rule;
+            //prevState.rules[prevState.ruleToSave.name] = null;     
+
             return prevState;
         });      
     }
@@ -52,8 +61,7 @@ class App extends Component {
                 </p>
                 <hr/>      
 
-                <RuleForm availableActions={this.state.availableActions}
-                          availableConditions={this.state.availableConditions}
+                <RuleForm ruleToSave={this.state.ruleToSave}
                           onSubmit={this.saveRule} />
                 <br/>
 

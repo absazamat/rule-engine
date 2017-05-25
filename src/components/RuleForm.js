@@ -9,25 +9,25 @@ class RuleForm extends Component {
         this.handleRuleNameChange = this.handleRuleNameChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
 
-        this.addCondition = this.addCondition.bind(this);
-        this.removeCondition = this.removeCondition.bind(this);  
-    }
+        this.toggleCondition = this.toggleCondition.bind(this);
 
-    state = {
-        ruleName: '',
-        actions: [],
-        conditions: [],
-
-        availableActions: [
-            { id: 1, name: 'Show' },
-            { id: 2, name: 'Hide' }
-        ],
-
-        availableConditions: [
-            { id: 1, name: 'A == B' },
-            { id: 2, name: 'A > B' },
-            { id: 3, name: 'A < B' }
-        ]
+        if (props.ruleToSave) {
+            this.state = {
+                ruleName: props.ruleToSave.name,
+                conditions: props.ruleToSave.conditions,
+                actions: props.ruleToSave.actions,
+                
+                availableConditions: [
+                    { id: 1, name: 'A == B' },
+                    { id: 2, name: 'A > B' },
+                    { id: 3, name: 'A < B' }
+                ],
+                availableActions: [
+                    { id: 1, name: 'Show' },
+                    { id: 2, name: 'Hide' }
+                ]
+            };
+        }
     }
 
     handleRuleNameChange(event) {
@@ -47,14 +47,15 @@ class RuleForm extends Component {
     handleSubmit(event) {
         event.preventDefault();
 
-        if (this.state.ruleName) {                     
+        if (this.state.ruleName) {
             this.props.onSubmit({
-                id: 0,
+                id: this.props.ruleToSave.id,
                 name: this.state.ruleName,
                 actions: this.state.actions,
                 conditions: this.state.conditions
             });
 
+            // reset view
             this.setState({ 
                 ruleName: '',
                 actions: [],
@@ -63,15 +64,14 @@ class RuleForm extends Component {
         }
     }
 
-    addCondition(condition) {
-        // do not add dupes
-        this.setState(prevState => ({        
-            conditions: prevState.conditions.concat(condition)
-        }));              
-    }
+    toggleCondition(condition) {
+        if (!condition) return;
 
-    removeCondition(c) {
-        alert(`removed: ${c}`);
+        this.setState(prevState => ({  
+            conditions: prevState.conditions.filter(c => c.id === condition.id).length > 0 ? 
+                            prevState.conditions.filter(c => c.id !== condition.id) :
+                            prevState.conditions.concat(condition)
+        }));         
     }
 
     render() {        
@@ -89,8 +89,7 @@ class RuleForm extends Component {
 
                     <ConditionForm availableConditions={this.state.availableConditions}
                                    selectedConditions={this.state.conditions}
-                                   addCondition={this.addCondition}
-                                   removeCondition={this.removeCondition} />
+                                   toggleCondition={this.toggleCondition} />
                     <br/>
 
                     <label htmlFor="actions">Actions:</label>
