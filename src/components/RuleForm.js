@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import ConditionForm from './ConditionForm';
+import ActionForm from './ActionForm';
 
 class RuleForm extends Component {    
     constructor(props) {
@@ -9,14 +10,16 @@ class RuleForm extends Component {
         this.handleRuleNameChange = this.handleRuleNameChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
 
+        this.toggleEntity = this.toggleEntity.bind(this);
         this.toggleCondition = this.toggleCondition.bind(this);
+        this.toggleAction = this.toggleAction.bind(this);
 
         if (props.ruleToSave) {
             this.state = {
                 ruleName: props.ruleToSave.name,
                 conditions: props.ruleToSave.conditions,
                 actions: props.ruleToSave.actions,
-                
+
                 availableConditions: [
                     { id: 1, name: 'A == B' },
                     { id: 2, name: 'A > B' },
@@ -63,16 +66,24 @@ class RuleForm extends Component {
             });
         }
     }
-
+    
     toggleCondition(condition) {
-        if (!condition) return;
+        this.toggleEntity(condition, 'conditions');
+    }
+
+    toggleAction(action) {
+        this.toggleEntity(action, 'actions');
+    }    
+
+    toggleEntity(entity, type) {
+        if (!entity) return;
 
         this.setState(prevState => ({  
-            conditions: prevState.conditions.filter(c => c.id === condition.id).length > 0 ? 
-                            prevState.conditions.filter(c => c.id !== condition.id) :
-                            prevState.conditions.concat(condition)
+            [type]: prevState[type].filter(c => c.id === entity.id).length > 0 ? 
+                            prevState[type].filter(c => c.id !== entity.id) :
+                            prevState[type].concat(entity)
         }));         
-    }
+    }    
 
     render() {        
         return (          
@@ -85,14 +96,16 @@ class RuleForm extends Component {
                            value={this.state.ruleName} 
                            onChange={this.handleRuleNameChange}
                            placeholder="rule name..." />
-                    <br /><br/>
+                    <br/><br/>
 
                     <ConditionForm availableConditions={this.state.availableConditions}
                                    selectedConditions={this.state.conditions}
                                    toggleCondition={this.toggleCondition} />
                     <br/>
 
-                    <label htmlFor="actions">Actions:</label>
+                    <ActionForm availableActions={this.state.availableActions}
+                                selectedActions={this.state.actions}
+                                toggleAction={this.toggleAction} />
                     <br/>
 
                     <input type="submit" value="Save" />                   
